@@ -805,10 +805,15 @@ function getScreen(){
 
   if(adapter.browserDetails.browser === 'chrome') {
     // Chrome 34+ requires an extension
-    var pending = window.setTimeout(function () {
-      alert('The required Chrome extension is not installed. To install it, go to https://chrome.google.com/webstore/detail/janus-webrtc-screensharin/hapfgfdkleiggjjpfpenajgdnfckjpaj (you might have to reload the page afterwards).');
+    var pending = window.setTimeout(function() {
+      if ( ! chrome.app.isInstalled  ){
+        chrome.webstore.install('',function(){
+            window.location.reload();
+          }
+        )
+      }
     }, 1000);
-    window.postMessage({ type: 'janusGetScreen', id: pending }, '*');
+    window.postMessage({ type: 'getScreen', id: pending }, '*');
   } else {
     if(navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices.getUserMedia(constraints).then(getScreenSuccess).catch(errorHandler);
@@ -931,7 +936,7 @@ if (adapter.browserDetails.browser === 'chrome') {
   window.addEventListener('message', function (event) {
     if(event.origin != window.location.origin)
       return;
-    if (event.data.type == 'janusGotScreen') {
+    if (event.data.type == 'gotScreen') {
       if (event.data.sourceId === '') {
         // user canceled
         console.log('You cancelled the request for permission, giving up...');
@@ -952,10 +957,10 @@ if (adapter.browserDetails.browser === 'chrome') {
         };
 
         constraints.video.mandatory.chromeMediaSourceId = event.data.sourceId;
-        // console.log("janusGotScreen: constraints=" + JSON.stringify(constraints));
+        // console.log("gotScreen: constraints=" + JSON.stringify(constraints));
         navigator.mediaDevices.getUserMedia(constraints).then(getChromeScreenSuccess).catch(errorHandler);
       }
-    } else if (event.data.type == 'janusGetScreenPending') {
+    } else if (event.data.type == 'getScreenPending') {
         window.clearTimeout(event.data.id);
     }
   });
