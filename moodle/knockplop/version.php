@@ -26,6 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_knockplop';
 $plugin->release = '0.1.0';
-$plugin->version = 2017101800;
+$plugin->version = 2017101801;
 $plugin->requires = 2015111600;
 $plugin->maturity = MATURITY_ALPHA;

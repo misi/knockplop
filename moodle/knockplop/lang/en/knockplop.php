@@ -25,4 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'KonckPlop WebRTC';
+$string['pluginname'] = 'KonckPlop WebRTC Meetingplace';
+
+$string['modulename'] = 'KnockPlop';
+$string['modulenameplural'] = 'KonckPlops';
+$string['modulename_help'] = 'Use the KnockPlop WebRTC module to interact using audio and video.';
+$string['pluginadministration'] = 'KnockPlop Administration';
+$string['pluginname'] = 'Konckplop';
+

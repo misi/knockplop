@@ -68,8 +68,13 @@ class mod_knockplop_mod_form extends moodleform_mod {
 
         // Adding the rest of knockplop settings, spreading all them into this fieldset
         // ... or adding more fieldsets ('header' elements) if needed for better logic.
-        $mform->addElement('static', 'label1', 'knockplopsettings', get_string('knockplopsettings', 'knockplop'));
-        $mform->addElement('header', 'knockplopfieldset', get_string('knockplopfieldset', 'knockplop'));
+        //$mform->addElement('static', 'label1', 'knockplopsettings', get_string('knockplopsettings', 'knockplop'));
+        //$mform->addElement('header', 'knockplopfieldset', get_string('knockplopfieldset', 'knockplop'));
+
+        $mform->addElement('text', 'room', get_string('room', 'knockplop'), array('size' => '64'));
+        $mform->setDefault('room', 'kereket_tekerek');
+        $mform->setType('room', PARAM_TEXT);
+        $mform->addHelpButton('room', 'room', 'knockplop');
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

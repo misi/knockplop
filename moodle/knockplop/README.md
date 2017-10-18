@@ -4,6 +4,8 @@ KonckPlop WebRTC Moodle Plugin
 
 TODO Provide more detailed description here.
 
+Thx for the icon to https://pixabay.com/en/group-members-people-team-business-42920/
+
 ## License ##
 
 2017 Misi <bakfitty@gmail.com>
