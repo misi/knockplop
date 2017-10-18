@@ -28,4 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 if ($ADMIN->fulltree) {
    // TODO: Define the plugin settings page.
    // https://docs.moodle.org/dev/Admin_settings
+   $settings->add(new admin_setting_configtext('knockplop_baseurl',
+	get_string('knockplopbaseurl', 'knockplop'),
+	get_string('knockplopbaseurl_desc', 'knockplop'), 'https://lutra.lab.vvc.niif.hu'));
 }

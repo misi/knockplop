@@ -61,5 +61,7 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
-
+echo "Tronix ide nekem azt nagyon gyönyörűséges csodaszép gombot!";
+$url=$CFG->knockplop_baseurl."/".$moduleinstance->room;
+echo "<a target=\"_blank\" href=\"".$url."\">Száll mint a pingvin!</a>";
 echo $OUTPUT->footer();
