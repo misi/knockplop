@@ -15,24 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin strings are defined here.
+ * Display information about all the knockplop modules in the requested course.
  *
  * @package     knockplop
- * @category    string
  * @copyright   2017 Misi <bakfitty@gmail.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace mod_knockplop\event;
 defined('MOODLE_INTERNAL') || die();
 
-$string['pluginname'] = 'KnockPlop WebRTC Meetingplace';
-
-$string['modulename'] = 'KnockPlop';
-$string['modulenameplural'] = 'KnockPlops';
-$string['modulename_help'] = 'Use the KnockPlop WebRTC module to interact using audio and video.';
-$string['pluginadministration'] = 'KnockPlop Administration';
-$string['pluginname'] = 'Knockplop';
-$string['knockplopname'] = 'Room Name';
-$string['knockplopname_help'] = 'Name of the meeting Room';
-$string['room'] = 'Room ID';
-$string['room_'] = 'ID of the meeting Room';
+class course_module_viewed extends \core\event\course_module_viewed {
+    protected function init() {
+        $this->data['objecttable'] = 'knockplop';
+        parent::init();
+    }
+    // You might need to override get_url() and get_legacy_log_data() if view mode needs to be stored as well.
+}
