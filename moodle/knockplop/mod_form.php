@@ -77,7 +77,7 @@ class mod_knockplop_mod_form extends moodleform_mod {
         $mform->addHelpButton('room', 'room', 'knockplop');
 
         $mform->addElement('advcheckbox', 'pageredirect', get_string('pageredirect', 'knockplop'));
-        $mform->setDefault('pageredirect', 1);
+        //$mform->setDefault('pageredirect', 1);
         $mform->setType('pageredirect', PARAM_BOOL);
 
         // Add standard elements.
