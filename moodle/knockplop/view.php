@@ -64,8 +64,6 @@ echo $OUTPUT->header();
 
 $url = $CFG->knockplop_baseurl."/".$moduleinstance->room;
 
-$THEME->modsheets = true;
-
 if ($moduleinstance->pageredirect){
 	redirect($url);
 }
