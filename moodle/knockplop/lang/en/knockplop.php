@@ -38,3 +38,5 @@ $string['room'] = 'Room ID';
 $string['room_'] = 'ID of the meeting Room';
 $string['knockplopbaseurl'] = 'KnockPlop base URL:';
 $string['knockplopbaseurl_desc'] = 'Give here the base URL, where KnockPlop could be reached.';
+$string['join_room'] = 'Join to the Meeting';
+$string['pageredirect'] = 'Join Meeting by page redirect';

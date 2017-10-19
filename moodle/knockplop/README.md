@@ -4,13 +4,7 @@ KonckPlop WebRTC Moodle Plugin
 
 TODO Provide more detailed description here.
 
-Thx for the icon to:
- * https://upload.wikimedia.org/wikipedia/commons/f/f6/Gnome-camera-web.svg
- * https://pixabay.com/en/group-members-people-team-business-42920/
- * https://pixabay.com/hu/emberek-soksz%C3%ADn%C5%B1s%C3%A9g-etnikai-h%C3%A1rom-23733/
- * https://www.svgrepo.com/show/8156/webcam.svg
- * https://pixabay.com/en/members-group-people-651819/
- * https://pixabay.com/en/people-communication-messaging-294106/
+Thx for the icon to: http://www.iconarchive.com/show/leather-icons-by-martynamru/camera-icon.html
 
 ## License ##
 

@@ -61,7 +61,22 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($modulecontext);
 
 echo $OUTPUT->header();
-echo "Tronix ide nekem azt nagyon gyönyörűséges csodaszép gombot!";
-$url=$CFG->knockplop_baseurl."/".$moduleinstance->room;
-echo "<a target=\"_blank\" href=\"".$url."\">Száll mint a pingvin!</a>";
+
+$url = $CFG->knockplop_baseurl."/".$moduleinstance->room;
+
+$THEME->modsheets = true;
+
+if ($moduleinstance->pageredirect){
+	redirect($url);
+}
+
+?>
+<div class="knockplop_home">
+	<div>
+		<a class="btn btn-lg btn-primary" target="_blank" href="<?php echo $url ?>"><i class="fa fa-users"></i> <?php echo get_string('join_room', 'knockplop');?></a>
+	<div>
+</div>
+
+<?php
+
 echo $OUTPUT->footer();
