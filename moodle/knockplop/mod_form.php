@@ -72,11 +72,13 @@ class mod_knockplop_mod_form extends moodleform_mod {
         //$mform->addElement('header', 'knockplopfieldset', get_string('knockplopfieldset', 'knockplop'));
 
         $mform->addElement('text', 'room', get_string('room', 'knockplop'), array('size' => '64'));
-        $mform->setDefault('room', 'kereket_tekerek');
+        $mform->setDefault('room', substr(base64_encode(sha1(mt_rand())), 0, $CFG->knockplop_roomlength));
         $mform->setType('room', PARAM_TEXT);
-	$mform->addElement('checkbox', 'pageredirect', get_string('pageredirect', 'knockplop'));
-        $mform->setDefault('pageredirect', 1);
         $mform->addHelpButton('room', 'room', 'knockplop');
+
+        $mform->addElement('advcheckbox', 'pageredirect', get_string('pageredirect', 'knockplop'));
+        $mform->setDefault('pageredirect', 1);
+        $mform->setType('pageredirect', PARAM_BOOL);
 
         // Add standard elements.
         $this->standard_coursemodule_elements();

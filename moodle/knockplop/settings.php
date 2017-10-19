@@ -31,4 +31,7 @@ if ($ADMIN->fulltree) {
    $settings->add(new admin_setting_configtext('knockplop_baseurl',
 	get_string('knockplopbaseurl', 'knockplop'),
 	get_string('knockplopbaseurl_desc', 'knockplop'), 'https://lutra.lab.vvc.niif.hu'));
+   $settings->add(new admin_setting_configtext('knockplop_roomlength',
+	get_string('knockploproomlength', 'knockplop'),
+	get_string('knockploproomlength_desc', 'knockplop'), 8));
 }
