@@ -52,3 +52,9 @@ and run gulp:
 gulp
 ```
 
+### Statistics
+
+To enable/disable `getStats` change `config.ENABLESTATS` in `server-conf.js`.
+To change interval to get statistics by `config.TIMESTATS` in `server-conf.js`.
+Change `config.STATS` list in `server-conf.js` to select which statistics write in file whose name is specified in `config.STATSFILE`.
+Change `STATS` list in `client-config.js` to select which statistics show over the video on the client page.
