@@ -66,6 +66,13 @@ io.on('connection', function(socket) {
       console.log("STUN/TURN REST API call: Error: "+ error );
       socket.emit('restTURN',{'restTURN':null});
     }
+     
+    //enable statistics
+    if (config.ENABLESTATS){
+      var time = (config.TIMESTATS) ? config.TIMESTATS : 1000;
+      socket.emit('getStats',{'enable' : config.ENABLESTATS, 'time' : time});
+    } 
+     
   });
   socket.on('ready', function(msg) {
     console.log('new participant: %s in room: %s', socket.id, msg.room);
@@ -105,6 +112,64 @@ io.on('connection', function(socket) {
     console.log('received name: from %s in room: ', socket.id, socket.room );
     socket.broadcast.to(socket.room).emit('name', {'pid':socket.id, 'name':msg} );
   });
+   
+  //GET STATS
+  socket.on('stats', function(msg) {
+    if (config.STATS.length>0){
+      var result = msg.statistics;
+      var local = result.connectionType.local.ipAddress[0].split(":");
+      var remote = result.connectionType.remote.ipAddress[0].split(":");
+      var statistics = {
+        "timestamp" : msg.timestamp,
+        "userName" : msg.userName,
+        "room" : msg.room,
+        "userPid" : msg.userPid,
+        "remotePid" : msg.remotePid,
+        "offerer" : result.isOfferer,
+        "localIP" : local[0],
+        "localPort" : local[1],
+        "remoteIP" : remote[0],
+        "remotePort" : remote[1],
+      };
+      config.STATS.forEach(function (s) {
+        if (s != "rtt" && s != "videoRtt" && s != "audioRtt"){
+          s = s.split('.');
+          var attr = s[0];
+          if (result[attr]){
+            var val = result[attr];
+            for (var i = 1; i <= s.length; i++){
+              attr = s[i];
+              if (val[attr]){
+                val = val[attr];
+              }
+            }
+            if (val){
+              statistics[s.join('-')] = val;
+            }
+          }else{
+            result.results.forEach(function(r){
+              if (r[attr]){
+                statistics[attr] = r[attr];
+              }
+            });
+          }
+        }else{
+          result.results.forEach(function(r) {
+              if (r.googRtt){
+                if (r.mediaType == s.substring(0, 5)){
+                  statistics[r.mediaType + "Rtt"] = r.googRtt;
+                }else if(!r.mediaType && s=="rtt"){
+                  statistics["rtt"] = r.googRtt;
+                }
+              }
+          });
+        }
+      });
+      var filename = (config.STATSFILE) ? config.STATSFILE : "statistics.json";
+      fs.appendFileSync(filename, JSON.stringify(statistics)+",\r\n");
+    }
+  });
+   
 });
 
 
