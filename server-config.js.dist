@@ -10,3 +10,35 @@ config.HTTP_PORT = 80;
 config.HTTPS_PORT = 443;
 config.REST_API_KEY = 'CHANGE ME TO API KEY';
 config.REST_API_URI = 'https://brain.lab.vvc.niif.hu/restapi/turn?uri_schema=turn&transport=tcp&ip_ver=ipv4&servercount=2&api_key='+config.REST_API_KEY;
+
+//stats list
+config.ENABLESTATS=true;
+config.TIMESTATS=1000;
+config.STATSFILE="statistics.json"
+config.STATS=[
+  "connectionType.local.networkType",
+  "connectionType.transport",
+  "bandwidth.availableSendBandwidth",
+  "bandwidth.googTargetEncBitrate",
+  "bandwidth.googTransmitBitrate",
+  "bandwidth.googBucketDelay",
+  "resolutions.recv.width",
+  "resolutions.recv.height",
+  "resolutions.send.width",
+  "resolutions.send.height",
+  "video.recv.codecs",
+  "video.bytesReceived",
+  "video.recv.availableBandwidth",
+  "video.send.codecs",
+  "video.bytesSent",
+  "video.send.availableBandwidth",
+  "audio.recv.codecs",
+  "audio.bytesReceived",
+  "audio.recv.availableBandwidth",
+  "audio.send.codecs",
+  "audio.bytesSent",
+  "audio.send.availableBandwidth",
+  "rtt",
+  "videoRtt",
+  "audioRtt",
+];
