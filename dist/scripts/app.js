@@ -329,6 +329,11 @@ var unreadMessages = 0;
 var userName = "";
 var chatMessages = [];
 
+//getStats flag
+var getStatsEnabled=false;
+//getStats interval
+var getStatsTime=1000;
+
 function redrawVideoContainer () {
   videoContainer.style.display = 'none'
   setTimeout(function(){videoContainer.style.display = 'inline-block'},10);
@@ -474,6 +479,14 @@ function initSocket() {
     callParticipant(msg);
     $('#chatAudio')[0].play();
   });
+  
+  //request getstats
+  socket.on('getStats', function(msg){
+    console.log('request getstats: ' + msg.enable + " at " + msg.time + "ms");
+    getStatsEnabled = msg.enable;
+    getStatsTime = msg.time;
+  });
+  
   socket.on('bye',function(msg){
     console.log('got bye from:',msg.pid );
     deleteParticipant(msg.pid);
@@ -576,6 +589,12 @@ function receivedDescription(msg){
     console.log("Received ANSWER SDP from pid: " + msg.pid);
     participantList[msg.pid].peerConnection.setRemoteDescription(new RTCSessionDescription(msg.sdp)).catch(errorHandler);
   }
+  
+  //getstats
+  if (getStatsEnabled && !msg.pid.includes("mirror")){
+    getterStats(participantList[msg.pid].peerConnection,msg.pid);
+  }
+  
 }
 
 function deleteParticipant(pid){
@@ -647,6 +666,10 @@ function addStream( stream, pid ) {
       var videoDiv = {}
       participantList[pid].mediaStream = stream;
       var video = document.createElement('video');
+    
+      //add stats container var
+      var stats=null;
+    
       video.srcObject = stream;
       video.autoplay = true;
       if ( pid == "localVideo" ) {
@@ -659,8 +682,25 @@ function addStream( stream, pid ) {
       } else {
         videoDiv = document.getElementById("templateVideoDiv").cloneNode(true)
         videoDiv.style.opacity = "0"; // invisible until layout is settled
+        
+        //CONTAINER STATS OVER VIDEO
+        if (STATS.length>0 && getStatsEnabled){
+          stats=document.createElement('div');
+          stats.id="stats-"+pid;
+          stats.classList.add("overlayTopRight");
+          stats.style="position: absolute;top: 10%;right: 1%;"
+               + "height: 70%; width: 35%;text-align: left; display: block;"
+               + "overflow-y: auto; font-size:100%";
+        }
+        
       }
       videoDiv.appendChild(video);
+    
+      //show stats
+      if (stats){
+         videoDiv.appendChild(stats);
+      }  
+    
       var progressBarDiv = document.createElement('div')
       progressBarDiv.classList.add('overlayBottom','hidden')
       var progressBar = new ProgressBar.Line(progressBarDiv, {
@@ -1399,4 +1439,87 @@ function sendChat(msg) {
 function receiveName(msg) {
   var nameholder = participantList[msg.pid]["videoDiv"]["children"]["remoteTopCenter"]["children"][0];
   nameholder.innerHTML = msg.name;
+}
+
+//statistics functions
+function bytesToSize(bytes) {
+   var k = 1000;
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+   if (bytes === 0) {
+      return '0 Bytes';
+   }
+   var i = parseInt(Math.floor(Math.log(bytes) / Math.log(k)), 10);
+     return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+}
+
+function getterStats(pc,pid){
+  if (typeof window.InstallTrigger !== 'undefined') {
+    getStats(pc, event.streams[0].getTracks()[0], function(result) {
+      writeStats(result,pid);
+    }, getStatsTime);
+  }else {
+    getStats(pc, function(result) {
+      writeStats(result,pid);
+    }, getStatsTime);
+  }
+}
+
+function writeStats(result,pid){
+
+  if (document.getElementById(pid)){
+    var msg = {
+        'userPid': userPid,
+        'remotePid' : pid,
+        'userName' : userName,
+        'room' : room,
+        'timestamp' : new Date(),
+        'statistics' : result
+      };
+    socket.emit('stats', msg);
+  }
+  var stats=document.getElementById("stats-"+pid);
+  if (stats){
+    var local=result.connectionType.local.ipAddress[0].split(":");
+    var remote=result.connectionType.remote.ipAddress[0].split(":");
+    var statistics="<p>local: "+local[0] + "</p>"
+      + "<p>local port: "+local[1] + "</p>"
+      + "<p>remote: "+remote[0] + "</p>"
+      + "<p>remote port: "+remote[1] + "</p>"
+      + "<p>offerer: "+result.isOfferer + "</p>";
+    STATS.forEach(function (s) {
+      if (s != "rtt" && s != "videoRtt" && s != "audioRtt"){
+        s = s.split('.');
+        var attr = s[0];
+        if (result[attr]){
+          var val = result[attr];
+          for (var i = 1; i <= s.length; i++){
+            attr = s[i];
+            if (val[attr]){
+              val = val[attr];
+            }
+          }
+          if (val){
+            statistics += "<p>" + s.join('-') + " : " + val + "</p>";
+          }
+        }else{
+          result.results.forEach(function(r){
+            if (r[attr]){
+              statistics += "<p>" + attr + " : " + r[attr] + "</p>";
+            }
+          });
+        }
+      }else{
+        result.results.forEach(function(r) {
+            if (r.googRtt){
+              if (r.mediaType == s.substring(0, 5)){
+                statistics += "<p>" + r.mediaType + "Rtt" + " : " + r.googRtt + "</p>";
+              }else if(!r.mediaType && s == "rtt"){
+                statistics += "<p>" + "rtt" + " : "  + r.googRtt + "</p>";
+              }
+            }
+        });
+      }
+    });
+    stats.innerHTML = statistics;
+  }
 }
