@@ -6,3 +6,32 @@ var peerConnectionConfig = {
 //        {'username':'turnuser','credential':'turnpassword','urls': 'turn:turnserver_IP:port?transport=udp'},
     ]
 }
+
+//stats list
+const STATS=[
+  "connectionType.local.networkType",
+  "connectionType.transport",
+  "bandwidth.availableSendBandwidth",
+  "bandwidth.googTargetEncBitrate",
+  "bandwidth.googTransmitBitrate",
+  "bandwidth.googBucketDelay",
+  "resolutions.recv.width",
+  "resolutions.recv.height",
+  "resolutions.send.width",
+  "resolutions.send.height",
+  "video.recv.codecs",
+  "video.bytesReceived",
+  "video.recv.availableBandwidth",
+  "video.send.codecs",
+  "video.bytesSent",
+  "video.send.availableBandwidth",
+  "audio.recv.codecs",
+  "audio.bytesReceived",
+  "audio.recv.availableBandwidth",
+  "audio.send.codecs",
+  "audio.bytesSent",
+  "audio.send.availableBandwidth",
+  "rtt",
+  "videoRtt",
+  "audioRtt",
+];
