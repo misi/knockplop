@@ -38,6 +38,8 @@ config.STATS=[
   "audio.send.codecs",
   "audio.bytesSent",
   "audio.send.availableBandwidth",
+  "packetsSent",
+  "packetsLost",
   "rtt",
   "videoRtt",
   "audioRtt",
