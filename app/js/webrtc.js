@@ -1220,3 +1220,11 @@ function writeStats(result,pid){
     stats.innerHTML = statistics;
   }
 }
+
+function hangupCall() {
+  if (confirm("Hagnup Call?")) {
+    window.open(window.location.origin, '_self', '');
+  }
+}
+
+
