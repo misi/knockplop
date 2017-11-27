@@ -6,3 +6,4 @@ bower_components
 *-config.js
 google_verify
 *.log
+statistics.json
