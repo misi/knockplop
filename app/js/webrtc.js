@@ -1149,31 +1149,32 @@ function bytesToSize(bytes) {
      return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
 }
 
+var wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 function getterStats(pc,pid){
-  if (typeof window.InstallTrigger !== 'undefined') {
-    getStats(pc, event.streams[0].getTracks()[0], function(result) {
+  wait(getStatsTime).then(() => pc.getStats().then(function(result) {
+      //result.forEach(stat => { if(stat.type == "outbound-rtp" || stat.type == "inbound-rtp") { console.log(stat);}});
       writeStats(result,pid);
-    }, getStatsTime);
-  }else {
-    getStats(pc, function(result) {
-      writeStats(result,pid);
-    }, getStatsTime);
-  }
+      getterStats(pc,pid);
+    }));
 }
 
 function writeStats(result,pid){
 
   if (document.getElementById(pid)){
-    var msg = {
-        'userPid': userPid,
-        'remotePid' : pid,
-        'userName' : userName,
-        'room' : room,
-        'timestamp' : new Date(),
-        'statistics' : result
-      };
-    socket.emit('stats', msg);
+     result.forEach(stat => {
+        var msg = {
+           'localPid': userPid,
+           'remotePid' : pid,
+           'userName' : userName,
+           'room' : room,
+           'timestamp' : new Date(),
+           'stat' : stat
+         };
+       socket.emit('stats', msg);
+    });
   }
+/*
   var stats=document.getElementById("stats-"+pid);
   if (stats){
     var local=result.connectionType.local.ipAddress[0].split(":");
@@ -1219,6 +1220,7 @@ function writeStats(result,pid){
     });
     stats.innerHTML = statistics;
   }
+*/
 }
 
 function hangupCall() {

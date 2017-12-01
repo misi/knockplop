@@ -44,3 +44,10 @@ config.STATS=[
   "videoRtt",
   "audioRtt",
 ];
+
+// logstash
+config.logstash = {
+    type: 'udp', // udp, tcp, memory
+    host: 'fqdn',
+    port: 10001
+};
